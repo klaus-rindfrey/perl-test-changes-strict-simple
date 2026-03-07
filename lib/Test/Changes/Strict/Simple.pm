@@ -1,4 +1,4 @@
-package Test::Changes::Strict;
+package Test::Changes::Strict::Simple;
 
 use 5.010;
 use strict;
@@ -367,7 +367,7 @@ sub _not_ok {
 }
 
 
-1; # End of Test::Changes::Strict
+1; # End of Test::Changes::Strict::Simple
 
 
 
@@ -378,12 +378,12 @@ __END__
 
 =head1 NAME
 
-Test::Changes::Strict - Strict semantic validation for CPAN Changes files
+Test::Changes::Strict::Simple - Strict semantic validation for CPAN Changes files
 
 =head1 SYNOPSIS
 
     use Test::More;
-    use Test::Changes::Strict qw(changes_strict_ok);
+    use Test::Changes::Strict::Simple qw(changes_strict_ok);
 
     changes_strict_ok('Changes');
 
@@ -396,7 +396,7 @@ Typically used in C<xt/release/> and guarded by:
 
 =head1 DESCRIPTION
 
-C<Test::Changes::Strict> provides strict semantic validation for
+C<Test::Changes::Strict::Simple> provides strict semantic validation for
 CPAN-style F<Changes> files.
 
 While other modules focus primarily on structural validation,
@@ -430,6 +430,34 @@ Release dates are monotonically non-decreasing
 The module is intended for use in release testing and helps
 detect common mistakes such as version regressions, invalid
 dates, and chronological inconsistencies.
+
+=head1 EXPORT
+
+
+=head1 IMPORT OPTIONS
+
+=head2 -check_dots => I<BOOL>
+
+=head2 -empty_line_after_version => I<BOOL>
+
+
+=head2 -no_export => I<BOOL>
+
+If true, no symbols are exported.
+
+   use MyModule -no_export => 1;
+
+is equivalent to:
+
+   use MyModule ();
+
+This option is useful in conjunction with other import options. Example:
+
+   use MyModule -empty_line_after_version => 1, -no_export => 1
+
+
+=head2 -version_re => I<REGEXP>
+
 
 =head1 FUNCTIONS
 
@@ -478,6 +506,7 @@ The module expects a traditional CPAN-style Changes format:
 
 Exotic or highly customized Changes formats may not be supported.
 
+
 =head1 SEE ALSO
 
 =over 4
@@ -523,7 +552,7 @@ it under the same terms as Perl itself.
 
 =head1 NAME
 
-Test::Changes::Strict - 
+Test::Changes::Strict::Simple - 
 
 
 =head1 SYNOPSIS

@@ -11,8 +11,8 @@
 ^pm_to_blib$
 
 # Module specific files
-\bTest-Changes-Strict\d+(?:\.\d+)+\/
-^Test-Changes-Strict\d+(?:\.\d+)+\.tar\.gz$
+\bTest-Changes-Strict-Simple\d+(?:\.\d+)+\/
+^Test-Changes-Strict-Simple\d+(?:\.\d+)+\.tar\.gz$
 
 
 # Temp, old and emacs backup files.

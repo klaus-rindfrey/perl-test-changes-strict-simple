@@ -37,8 +37,8 @@ nytprof.out
 .last_cover_stats
 
 # Module specific files
-Test-Changes-Strict-*
-Test-Changes-Strict-*.tar.gz
+Test-Changes-Strict-Simple*
+Test-Changes-Strict-Simple*.tar.gz
 
 
 # CPAN-related temporary files

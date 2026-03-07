@@ -4,7 +4,7 @@ use warnings;
 use Test::More;
 use Test::Builder::Tester;
 
-use Test::Changes::Strict -version_re => qr/\d+\.\d+\.\d+/;
+use Test::Changes::Strict::Simple -version_re => qr/\d+\.\d+\.\d+/;
 
 use FindBin;
 use lib "$FindBin::Bin/lib";

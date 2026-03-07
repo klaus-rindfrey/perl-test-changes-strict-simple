@@ -4,7 +4,7 @@ use warnings;
 use Test::More;
 use Test::Builder::Tester;
 
-use Test::Changes::Strict -empty_line_after_version => 1;
+use Test::Changes::Strict::Simple -empty_line_after_version => 1;
 
 use FindBin;
 use lib "$FindBin::Bin/lib";

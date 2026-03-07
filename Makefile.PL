@@ -6,7 +6,7 @@ use ExtUtils::MakeMaker;
 use File::Spec::Functions;
 use autodie;
 
-my $The_Module = 'Test::Changes::Strict';
+my $The_Module = 'Test::Changes::Strict::Simple';
 my $PM_File = catfile('lib', split(/::/, "$The_Module.pm"));
 my $Git_URL = 'https://github.com/klaus-rindfrey/perl-' . join('-', split(/::/, lc($The_Module)));
 
