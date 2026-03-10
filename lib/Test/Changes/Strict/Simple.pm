@@ -6,14 +6,11 @@ use warnings;
 use parent 'Exporter';
 our @EXPORT = qw(changes_strict_ok);
 
-#use autodie;
 use version;
 
 use Test::Builder;
 
 use Time::Local;
-
-use Data::Dumper;
 use Carp;
 
 
@@ -86,8 +83,8 @@ sub import {
   } else {
     # No arguments ==> preserve standard Exporter behaviour.
     # This keeps the distinction between:
-    #   use MyModule;
-    #   use MyModule ();
+    #   use Test::Changes::Strict::Simple;
+    #   use Test::Changes::Strict::Simple ();
     __PACKAGE__->export_to_level(1, $class, @EXPORT);
   }
 }
@@ -402,26 +399,95 @@ this module performs additional consistency checks, including:
 
 =item *
 
-Versions are strictly monotonically increasing
+The indentations must be uniform.
 
 =item *
 
-Release dates are valid calendar dates
+No trailing spaces.
 
 =item *
 
-Release dates are not in the future
+No white characters other than spaces.
 
 =item *
 
-Release dates are not earlier than the first public Perl release (1987)
+No more than three blank lines at the end of the file.
+
+=item *
+
+No version without items
+
+=item *
+
+First line must be a title matching:
+
+   qr/
+      ^
+       Revision\ history\ for\ (?:
+         (?:perl\ )?
+         (?:
+           (?:module\ \w+(?:::\w+)*)
+         |
+           (?:distribution\ \w+(?:-\w+)*)
+         )
+       )
+       $
+     /x;
+
+=item *
+
+Title lines and version lines are never indented.
+
+=item *
+
+A version line consists of a version string and a date separated by blanks.
+
+=item *
+
+Dates match C</\d+\.\d+/>.
+
+=item *
+
+Versions are strictly monotonically increasing.
+
+=item *
+
+Release dates are valid calendar dates.
+
+=item *
+
+Release dates are not in the future.
+
+=item *
+
+Release dates are not earlier than the first public Perl release (1987).
 
 =item *
 
 Release dates are monotonically non-decreasing
-(multiple releases on the same day are allowed)
+(multiple releases on the same day are allowed).
 
 =back
+
+Note: an item can span more than one line.
+
+Example of a valied Changes file:
+
+   Revision history for distribution Foo-Bar-Baz
+
+   0.03 2024-03-01
+     - Another version, same day.
+
+   0.02 2024-03-01
+     - Bugfix.
+     - Added a very fancy feature that alllows this
+       and that.
+     - Another bugfix.
+
+   0.01 2024-02-28
+     - Initial release. This will hopefully work
+       fine.
+
 
 The module is intended for use in release testing and helps
 detect common mistakes such as version regressions, invalid
@@ -429,69 +495,80 @@ dates, and chronological inconsistencies.
 
 =head1 EXPORT
 
+By default, the following symbols are exported:
+
+   changes_strict_ok
+
 
 =head1 IMPORT OPTIONS
 
 =head2 -check_dots => I<BOOL>
 
+By default, items must end with a period. This check can be disabled by
+passing C<-check_dots> with a value of I<C<false>>. Example:
+
+    use Test::Changes::Strict::Simple -check_dots => 0;
+
+
 =head2 -empty_line_after_version => I<BOOL>
+
+By default, the first element must immediately follow the version line.
+Passing C<-empty_line_after_version> with a I<C<true>> value changes this
+behavior so that there must be exactly one blank line between a version line
+and the first element. Example:
+
+    use Test::Changes::Strict::Simple -empty_line_after_version => 1;
 
 
 =head2 -no_export => I<BOOL>
 
 If true, no symbols are exported.
 
-   use MyModule -no_export => 1;
+   use Test::Changes::Strict::Simple -no_export => 1;
 
 is equivalent to:
 
-   use MyModule ();
+   use Test::Changes::Strict::Simple ();
 
 This option is useful in conjunction with other import options. Example:
 
-   use MyModule -empty_line_after_version => 1, -no_export => 1
+   use Test::Changes::Strict::Simple -empty_line_after_version => 1, -no_export => 1
 
 
 =head2 -version_re => I<REGEXP>
 
+By default, version numbers must match C<qr/\d+\.\d+/>. This can be overridden
+by passing a custom compiled regular expression via C<-version_re>. Note that
+version strings must be valid with respect to the C<version> module.
+
 
 =head1 FUNCTIONS
 
-=head2 changes_strict_ok
-
-    changes_strict_ok($file);
+=head2 changes_strict_ok(I<C<NAME_ARGUMENTS>>)
 
 Runs strict validation on the given Changes file.
-If no file is provided, C<Changes> is assumed.
 
-The function emits one or more test events using C<Test::Builder>.
-It does not plan tests and does not call C<done_testing>.
+Named arguments:
 
-Returns true if all checks pass, false otherwise.
+=over
 
-=head1 DESIGN PRINCIPLES
+=item C<changes_file>
 
-This module intentionally separates:
+Optional. File to be validated. If no file is provided, C<Changes> is assumed.
 
-=over 4
+=item C<module_version>
 
-=item *
-
-Structural validation of Changes entries
-
-=item *
-
-Chronological consistency
-
-=item *
-
-Semantic validation of release metadata
+Optional. If specified, the function checks whether the highest version is
+equal to I<C<module_version>>. This is done by comparing strings.
 
 =back
 
-It does not attempt to compare module versions with the top
-Changes entry. Such checks are better implemented in separate
-release tests to preserve single responsibility.
+The function emits one test event using C<Test::Builder> and can output
+diagnostic messages if necessary.
+It does not plan tests and does not call C<done_testing>.
+
+Returns I<C<true>> if all checks pass, I<C<true>> otherwise.
+
 
 =head1 LIMITATIONS
 
@@ -533,36 +610,20 @@ Parser and model for Changes files.
 
 =back
 
+Furthermore: L<Test::Builder>, L<Time::Local>, L<version>
+
+
 =head1 AUTHOR
 
-Your Name E<lt>you@example.comE<gt>
+Klaus Rindfrey, C<< <klausrin at cpan.org.eu> >>
+
 
 =head1 LICENSE
+
+This software is copyright (c) 2026 by Klaus Rindfrey.
 
 This library is free software; you may redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =cut
 
-#--------------------------------------------------------------------------------------
-
-=head1 NAME
-
-Test::Changes::Strict::Simple - 
-
-
-=head1 SYNOPSIS
-
-
-=head1 DESCRIPTION
-
-
-=head1 COPYRIGHT
-
-    Copyright 2026 Klaus Rindfrey
-    
-
-=head1 SEE ALSO
-
-
-=cut

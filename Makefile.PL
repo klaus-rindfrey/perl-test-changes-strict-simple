@@ -28,16 +28,27 @@ my $meta_merge_supported = eval { ExtUtils::MakeMaker->VERSION(6.46) };
 
 # PREREQ_PM
 my %runtime_requires = (
-                        'strict'   => 0,
-                        'warnings' => 0,
-                        'Exporter' => '1.6',
+                        'strict'        => '0',
+                        'warnings'      => '0',
+                        'constant'      => '0',
+                        'version'       => '0',
+                        'Carp'          => '0',
+                        'Exporter'      => '1.6',
+                        'Test::Builder' => '0',
+                        'Time::Local'   => '0',
                        );
 
 # TEST_REQUIRES
 my %test_requires = (
-                     'strict'     => '0',
-                     'warnings'   => '0',
-                     'Test::More' => '0',
+                     'autodie'               => '0',
+                     'strict'                => '0',
+                     'warnings'              => '0',
+                     'Exporter'              => '1.6',
+                     'FindBin'               => '0',
+                     'File::Spec::Functions' => '0',
+                     'File::Temp'            => '0',
+                     'Test::Builder::Tester' => '0',
+                     'Test::More'            => '0',
                     );
 
 # CONFIGURE_REQUIRES
