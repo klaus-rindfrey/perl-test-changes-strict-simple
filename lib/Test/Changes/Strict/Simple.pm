@@ -28,6 +28,7 @@ my $TB = Test::Builder->new;
 my $Ver_Re = qr/\d+\.\d+/;
 
 use constant {
+              NOW => time,
               map { $_ => $_ } qw(
                                    st_chlog_head
                                    st_empty_after_head
@@ -38,10 +39,6 @@ use constant {
                                    st_empty_after_item
                                    st_EOF
                                 )
-             };
-
-use constant {
-              NOW => time,
              };
 
 
@@ -202,22 +199,22 @@ sub _check_title {
 sub _check_changes {
   my ($lines, $versions) = @_;
   local $Test::Builder::Level = $Test::Builder::Level + 1;
-my %states = (
-              +st_chlog_head          => [st_empty_after_head],
-              +st_empty_after_head    => [st_version],
-              $Empty_Line_After_Version ? (
-                                           +st_version             => [st_empty_after_version],
-                                           +st_empty_after_version => [st_item],
-                                          )
-                                        : (
-                                           +st_version             => [st_item],
-                                          ),
-              +st_item                => [st_item, st_item_cont, st_empty_after_item, st_EOF],
-              +st_item_cont           => [st_item, st_item_cont, st_empty_after_item],
-              +st_empty_after_item    => [st_version, st_EOF],
-              +st_EOF                 => [],
-             );
-$_ = { map { $_ => undef } @$_ } for values %states;
+  my %states = (
+                +st_chlog_head          => [st_empty_after_head],
+                +st_empty_after_head    => [st_version],
+                $Empty_Line_After_Version ? (
+                                             +st_version             => [st_empty_after_version],
+                                             +st_empty_after_version => [st_item],
+                                            )
+                                          : (
+                                             +st_version             => [st_item],
+                                            ),
+                +st_item                => [st_item, st_item_cont, st_empty_after_item, st_EOF],
+                +st_item_cont           => [st_item, st_item_cont, st_empty_after_item],
+                +st_empty_after_item    => [st_version, st_EOF],
+                +st_EOF                 => [],
+               );
+  $_ = { map { $_ => undef } @$_ } for values %states;
   my %empty_line_st = (+st_chlog_head => st_empty_after_head,
                        +st_item       => st_empty_after_item,
                        $Empty_Line_After_Version ? (+st_version => st_empty_after_version) : (),
@@ -329,8 +326,8 @@ sub _check_version_monotonic {
   return $diag ? _not_ok($diag) : !0;
 }
 
-# ---------------------------- Helper functions ---------------------------------------
 
+# ---------------------------- Helper functions ---------------------------------------
 
 sub _version_line_check {
   # Line is already trimmed!
@@ -346,7 +343,6 @@ sub _version_line_check {
     $epoch = Time::Local::timegm(0, 0, 0, $d, $m - 1, $y);
     1;
   } or return "'$date': invalid date";
-
   $y     >= 1987 or return "$date: before Perl era";
   $epoch <= NOW  or return "$date: date is in the future.";
   return { version     => $version,
