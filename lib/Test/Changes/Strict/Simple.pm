@@ -544,7 +544,7 @@ version strings must be valid with respect to the C<version> module.
 
 =head1 FUNCTIONS
 
-=head2 changes_strict_ok(I<C<NAME_ARGUMENTS>>)
+=head2 changes_strict_ok(I<C<NAMED_ARGUMENTS>>)
 
 Runs strict validation on the given Changes file.
 
