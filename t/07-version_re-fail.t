@@ -11,7 +11,8 @@ use lib "$FindBin::Bin/lib";
 
 use Local::Test::Helper qw(write_changes);
 
-subtest 'initial version has wrong format' => sub {
+{
+  note("initial version has wrong format");
   my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -28,7 +29,7 @@ EOF
   test_diag("Line 7: version check: 0.01: invalid version");
   changes_strict_ok(changes_file => $fname);
   test_test("fail works");
-};
+}
 
 
 # -------------------------------------------------------------------------------------------------

@@ -12,8 +12,10 @@ use lib "$FindBin::Bin/lib";
 use Local::Test::Helper qw(write_changes set_test_out_all_ok);
 
 
-subtest 'one version with one simple entry / examples with different titles.' => sub  {
-  subtest '1: ... for distribution Foo-Bar-Baz' => sub {
+{
+  note("one version with one simple entry / examples with different titles.");
+  {
+    note("1: ... for distribution Foo-Bar-Baz");
     my $valid_changes = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -25,9 +27,10 @@ EOF
     set_test_out_all_ok();
     changes_strict_ok(changes_file => $valid_changes);
     test_test("valid Changes file passes");
-  };
+  }
 
-  subtest '2 ... for perl distribution Foo-Bar-Baz' => sub {
+  {
+    note("2 ... for perl distribution Foo-Bar-Baz");
     my $valid_changes = write_changes(<<'EOF');
 Revision history for perl distribution Foo-Bar-Baz
 
@@ -39,8 +42,9 @@ EOF
     set_test_out_all_ok();
     changes_strict_ok(changes_file => $valid_changes);
     test_test("valid Changes file passes");
-  };
-  subtest '3: ... for module Foo::Bar::Baz' => sub {
+  }
+  {
+    note("3: ... for module Foo::Bar::Baz");
     my $valid_changes = write_changes(<<'EOF');
 Revision history for module Foo::Bar::Baz
 
@@ -52,8 +56,9 @@ EOF
     set_test_out_all_ok();
     changes_strict_ok(changes_file => $valid_changes);
     test_test("valid Changes file passes");
-  };
-  subtest '4: ... for perl module Foo::Bar::Baz' => sub {
+  }
+  {
+    note("4: ... for perl module Foo::Bar::Baz");
     my $valid_changes = write_changes(<<'EOF');
 Revision history for perl module Foo::Bar::Baz
 
@@ -65,10 +70,11 @@ EOF
     set_test_out_all_ok();
     changes_strict_ok(changes_file => $valid_changes);
     test_test("valid Changes file passes");
-  };
-};
+  }
+}
 
-subtest 'two simple entries and 3 trailing empty lines' => sub  {
+{
+  note("two simple entries and 3 trailing empty lines");
   my $valid_changes = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -86,9 +92,10 @@ EOF
   set_test_out_all_ok();
   changes_strict_ok(changes_file => $valid_changes);
   test_test("valid Changes file passes");
-};
+}
 
-subtest 'multiple entries, some with line continuation, 2 versions same day' => sub  {
+{
+  note("multiple entries, some with line continuation, 2 versions same day");
   my $valid_changes = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -112,7 +119,7 @@ EOF
   set_test_out_all_ok();
   changes_strict_ok(changes_file => $valid_changes);
   test_test("valid Changes file passes");
-};
+}
 
 # -------------------------------------------------------------------------------------------------
 

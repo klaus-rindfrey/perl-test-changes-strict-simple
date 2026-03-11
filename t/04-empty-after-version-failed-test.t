@@ -14,82 +14,90 @@ use Local::Test::Helper qw(:all);
 
 
 
-subtest 'missing Changes file' => sub {
+{
+  note("missing Changes file");
   my $non_existing_file = 'this-file-does-not-exist';
   test_out("not ok 1 - Changes file passed strict checks");
   test_fail(+2);
   test_diag("The '$non_existing_file' file does not exist");
   changes_strict_ok(changes_file => 'this-file-does-not-exist');
   test_test("fail works");
-};
+}
 
-subtest 'Changes file is a directory, not a file' => sub {
+{
+  note("Changes file is a directory, not a file");
   my $dir = tempdir(CLEANUP => 1);
   test_out("not ok 1 - Changes file passed strict checks");
   test_fail(+2);
   test_diag("The '$dir' file is not a readable text file");
   changes_strict_ok(changes_file => $dir);
   test_test("fail works");
-};
+}
 
-
-subtest 'Changes file is empty' => sub {
+{
+  note("Changes file is empty");
   my $fname = write_changes(q{});
   test_out("not ok 1 - Changes file passed strict checks");
   test_fail(+2);
   test_diag("The '$fname' file empty");
   changes_strict_ok(changes_file => $fname);
   test_test("fail works");
-};
+}
 
-
-subtest 'No newline at end of file' => sub {
+{
+  note("No newline at end of file");
   my $fname = write_changes('Revision history for distribution Foo-Bar-Baz');
   test_out("not ok 1 - Changes file passed strict checks");
   test_fail(+2);
   test_diag("'$fname': no newline at end of file");
   changes_strict_ok(changes_file => $fname);
   test_test("fail works");
-};
+}
 
-subtest 'Wrong title' => sub {
-  subtest 'Malformed title 1' => sub {
+{
+  note("Wrong title");
+  {
+    note("Malformed title 1");
     my $fname = write_changes("Revision history for Foo-Bar-Baz\n");
     test_out("not ok 1 - Changes file passed strict checks");
     test_fail(+2);
     test_diag("Missing or malformed 'Revision history ...' at line 1");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
+  }
 
-  subtest 'Malformed title 2' => sub {
+  {
+    note("Malformed title 2");
     my $fname = write_changes("Revision history for module Foo-Bar-Baz\n");
     test_out("not ok 1 - Changes file passed strict checks");
     test_fail(+2);
     test_diag("Missing or malformed 'Revision history ...' at line 1");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
+  }
 
-  subtest 'Malformed title 3' => sub {
+  {
+    note("Malformed title 3");
     my $fname = write_changes("Revision history for distribution Foo::Bar::Baz\n");
     test_out("not ok 1 - Changes file passed strict checks");
     test_fail(+2);
     test_diag("Missing or malformed 'Revision history ...' at line 1");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
+  }
 
-  subtest 'Malformed title 4' => sub {
+  {
+    note("Malformed title 4");
     my $fname = write_changes("Revision history for distribution Foo-Bar::Baz\n");
     test_out("not ok 1 - Changes file passed strict checks");
     test_fail(+2);
     test_diag("Missing or malformed 'Revision history ...' at line 1");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
+  }
 
-  subtest 'Missing title' => sub {
+  {
+    note("Missing title");
     my $fname = write_changes(<<'EOF');
 0.01 2024-02-28
 
@@ -100,12 +108,14 @@ EOF
     test_diag("Missing or malformed 'Revision history ...' at line 1");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
+  }
+}
 
-};
 
-subtest 'Non-space white characters' => sub {
-  subtest '1 non-space white character' => sub {
+{
+  note("Non-space white characters");
+  {
+    note("1 non-space white character");
     my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
 
@@ -118,9 +128,10 @@ EOF
     test_diag("Non-space white character found at line 5");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
+  }
 
-  subtest 'Multiple non-space white characters' => sub {
+  {
+    note("Multiple non-space white characters");
     my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
 
@@ -137,11 +148,12 @@ EOF
     test_diag("Non-space white character found at lines 5, 9");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
-};
+  }
+}
 
 
-subtest 'Trailing blanks' => sub {
+{
+  note("Trailing blanks");
   my @changes = ("Revision history for distribution Foo-Bar-Baz",  # 0 - line  1
                  "",                                               # 1 - line  2
                  "0.02 2024-03-01",                                # 2 - line  3
@@ -153,7 +165,8 @@ subtest 'Trailing blanks' => sub {
                  "  - Initial release.",                           # 8 - line  9
                  ""                                                # 9 - line 10
                 );
-  subtest 'Trailing blanks in title line' => sub {
+  {
+    note("Trailing blanks in title line");
     my @test_input = @changes;
     $test_input[0] .= "  ";
     my $fname = write_changes(join("\n", @test_input));
@@ -162,9 +175,10 @@ subtest 'Trailing blanks' => sub {
     test_diag("Trailing white character at line 1");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
+  }
 
-  subtest 'Trailing blanks in empty line' => sub {
+  {
+    note("Trailing blanks in empty line");
     my @test_input = @changes;
     $test_input[3] .= "  ";
     my $fname = write_changes(join("\n", @test_input));
@@ -173,9 +187,10 @@ subtest 'Trailing blanks' => sub {
     test_diag("Trailing white character at line 4");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
+  }
 
-  subtest 'Trailing blanks in multiple lines' => sub {
+  {
+    note("Trailing blanks in multiple lines");
     my @test_input = @changes;
     $test_input[$_] .= "  " for (1, 2, 4);
     my $fname = write_changes(join("\n", @test_input));
@@ -184,9 +199,10 @@ subtest 'Trailing blanks' => sub {
     test_diag("Trailing white character at lines 2, 3, 5");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
+  }
 
-  subtest 'Trailing blanks and non-blank white chars in multiple lines' => sub {
+  {
+    note("Trailing blanks and non-blank white chars in multiple lines");
     my @test_input = @changes;
     $test_input[1] .= "\t ";
     $test_input[2] .= "    ";
@@ -203,20 +219,23 @@ subtest 'Trailing blanks' => sub {
     test_diag($diag);
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
-  subtest '4 trailing empty lines' => sub {
+  }
+  {
+    note("4 trailing empty lines");
     my $fname = write_changes(join("\n", (@changes, ("") x 4)));
     test_out("not ok 1 - Changes file passed strict checks");
     test_fail(+2);
     test_diag("more than 3 empty lines at end of file");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
-};
+  }
+}
 
 
-subtest 'check changes' => sub {
-  subtest 'missing dot at end of line' => sub {
+{
+  note("check changes");
+  {
+    note("missing dot at end of line");
     my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -239,10 +258,12 @@ EOF
     test_diag("Line 13: missing dot at end of line");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
+  }
 
-  subtest 'unexpected empty lines' => sub {
-    subtest "unexpected empty line after title" => sub {
+  {
+    note("unexpected empty lines");
+    {
+      note("unexpected empty line after title");
       my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -257,8 +278,9 @@ EOF
       test_diag("Line 3: unexpected empty line");
       changes_strict_ok(changes_file => $fname);
       test_test("fail works");
-    };
-    subtest "unexpected empty line after version line" => sub {
+    }
+    {
+      note("unexpected empty line after version line");
       my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -273,9 +295,10 @@ EOF
       test_diag("Line 5: unexpected empty line");
       changes_strict_ok(changes_file => $fname);
       test_test("fail works");
-    };
+    }
 
-    subtest "unexpected empty line between item lines" => sub {
+    {
+      note("unexpected empty line between item lines");
       my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -293,9 +316,10 @@ EOF
       test_diag("Line 6: unexpected empty line");
       changes_strict_ok(changes_file => $fname);
       test_test("fail works");
-    };
+    }
 
-    subtest "unexpected empty line between item line and continuation" => sub {
+    {
+      note("unexpected empty line between item line and continuation");
       my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -314,9 +338,10 @@ EOF
       test_diag("Line 9: unexpected empty line");
       changes_strict_ok(changes_file => $fname);
       test_test("fail works");
-    };
+    }
 
-    subtest "unexpected empty line between item line and version line" => sub {
+    {
+      note("unexpected empty line between item line and version line");
       my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -339,11 +364,13 @@ EOF
       test_diag("Line 10: unexpected empty line");
       changes_strict_ok(changes_file => $fname);
       test_test("fail works");
-    };
-  };
+    }
+  }
 
-  subtest 'unexpected version line' => sub {
-    subtest 'unexpected version line immediately after title line' => sub {
+  {
+    note("unexpected version line");
+    {
+      note("unexpected version line immediately after title line");
       my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 0.02 2024-03-01
@@ -355,9 +382,10 @@ EOF
       test_diag("Line 2: unexpected version line");
       changes_strict_ok(changes_file => $fname);
       test_test("fail works");
-    };
+    }
 
-    subtest 'unexpected version line immediately after version line' => sub {
+    {
+      note("unexpected version line immediately after version line");
       my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -379,9 +407,10 @@ EOF
       test_diag("Line 12: unexpected version line");
       changes_strict_ok(changes_file => $fname);
       test_test("fail works");
-    };
+    }
 
-    subtest 'unexpected version line after empty line after version line' => sub {
+    {
+      note("unexpected version line after empty line after version line");
       my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -404,14 +433,15 @@ EOF
       test_diag("Line 13: unexpected version line");
       changes_strict_ok(changes_file => $fname);
       test_test("fail works");
-    };
-  };
+    }
+  }
 
-
-
-  subtest 'Version line check' => sub {
-    subtest 'Not exactly two values' => sub {
-      subtest 'Version, but no date' => sub {
+  {
+    note("Version line check");
+    {
+      note("Not exactly two values");
+      {
+        note("Version, but no date");
         my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -424,8 +454,9 @@ EOF
         test_diag("Line 3: version check: not exactly two values");
         changes_strict_ok(changes_file => $fname);
         test_test("fail works");
-      };
-      subtest 'No version, but a date' => sub {
+      }
+      {
+        note("No version, but a date");
         my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -438,11 +469,13 @@ EOF
         test_diag("Line 3: version check: not exactly two values");
         changes_strict_ok(changes_file => $fname);
         test_test("fail works");
-      };
-    };
+      }
+    }
 
-    subtest 'invalid version' => sub {
-      subtest 'too many dots' => sub {
+    {
+      note("invalid version");
+      {
+        note("too many dots");
         my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -455,8 +488,9 @@ EOF
         test_diag("Line 3: version check: 0.03.5.9: invalid version");
         changes_strict_ok(changes_file => $fname);
         test_test("fail works");
-      };
-      subtest "heading 'v'" => sub {
+      }
+      {
+        note("heading 'v'");
         my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -469,14 +503,16 @@ EOF
         test_diag("Line 3: version check: v0.03: invalid version");
         changes_strict_ok(changes_file => $fname);
         test_test("fail works");
-      };
-    };
-  };
+      }
+    }
+  }
 
-
-  subtest 'Invalid date' => sub {
-    subtest 'wrong format' => sub {
-      subtest 'wrong format: separator' => sub {
+  {
+    note("Invalid date");
+    {
+      note("wrong format");
+      {
+        note("wrong format: separator");
         my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -489,9 +525,10 @@ EOF
         test_diag("Line 3: version check: 2024/04/01: invalid date: wrong format");
         changes_strict_ok(changes_file => $fname);
         test_test("fail works");
-      };
+      }
 
-      subtest 'wrong format: too many digits' => sub {
+      {
+        note("wrong format: too many digits");
         my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -504,11 +541,13 @@ EOF
         test_diag("Line 3: version check: 2024-004-01: invalid date: wrong format");
         changes_strict_ok(changes_file => $fname);
         test_test("fail works");
-      };
-    };
+      }
+    }
 
-    subtest 'Non-existent date' => sub {
-      subtest '35 May' => sub {
+    {
+      note("Non-existent date");
+      {
+        note("35 May");
         my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -521,9 +560,10 @@ EOF
         test_diag("Line 3: version check: '2024-05-35': invalid date");
         changes_strict_ok(changes_file => $fname);
         test_test("fail works");
-      };
+      }
 
-      subtest '29 February, but not a leap year' => sub {
+      {
+        note("29 February, but not a leap year");
         my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -536,9 +576,10 @@ EOF
         test_diag("Line 3: version check: '2025-02-29': invalid date");
         changes_strict_ok(changes_file => $fname);
         test_test("fail works");
-      };
-    };
-    subtest 'future date' => sub {
+      }
+    }
+    {
+      note("future date");
       my $next_year = (localtime)[5] + 1900 + 1;
       my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
@@ -552,8 +593,9 @@ EOF
       test_diag("Line 3: version check: $next_year-04-03: date is in the future.");
       changes_strict_ok(changes_file => $fname);
       test_test("fail works");
-    };
-    subtest 'before Perl era' => sub {
+    }
+    {
+      note("before Perl era");
       my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
 
@@ -566,11 +608,11 @@ EOF
       test_diag("Line 3: version check: 1965-04-03: before Perl era");
       changes_strict_ok(changes_file => $fname);
       test_test("fail works");
-    };
-  };
+    }
+  }
 
-
-  subtest 'unexpected item line' => sub {
+  {
+    note("unexpected item line");
     my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
 
@@ -585,10 +627,12 @@ EOF
     test_diag("Line 3: unexpected item line");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
+  }
 
-  subtest "invalid item content" => sub {
-    subtest "empty item" => sub {
+  {
+    note("invalid item content");
+    {
+      note("empty item");
       my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
 
@@ -606,9 +650,10 @@ EOF
     test_diag("Line 6: invalid item content");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-    };
+    }
 
-    subtest "no space after dash" => sub {
+    {
+      note("no space after dash");
       my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
 
@@ -625,9 +670,10 @@ EOF
     test_diag("Line 6: invalid item content");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-    };
+    }
 
-    subtest "more than 1 space after dash" => sub {
+    {
+      note("more than 1 space after dash");
       my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
 
@@ -644,10 +690,11 @@ EOF
     test_diag("Line 9: invalid item content");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-    };
-  };
+    }
+  }
 
-  subtest 'item line: no indentation / wrong indentation' => sub {
+  {
+    note("item line: no indentation / wrong indentation");
     my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
 
@@ -671,9 +718,11 @@ EOF
     test_diag("Line 14: wrong indentation");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
-  subtest 'unexpected item continuation' => sub {
-    subtest 'immediately after title' => sub {
+  }
+  {
+    note("unexpected item continuation");
+    {
+      note("immediately after title");
       my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
   Donec sodales sagittis magna.
@@ -687,8 +736,9 @@ EOF
       test_diag("Line 2: unexpected item continuation");
       changes_strict_ok(changes_file => $fname);
       test_test("fail works");
-    };
-    subtest 'after empty line after title' => sub {
+    }
+    {
+      note("after empty line after title");
       my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
 
@@ -703,8 +753,9 @@ EOF
       test_diag("Line 3: unexpected item continuation");
       changes_strict_ok(changes_file => $fname);
       test_test("fail works");
-    };
-    subtest 'immediately after version line' => sub {
+    }
+    {
+      note("immediately after version line");
       my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
 
@@ -718,8 +769,9 @@ EOF
       test_diag("Line 4: unexpected item continuation");
       changes_strict_ok(changes_file => $fname);
       test_test("fail works");
-    };
-    subtest 'after empty line after version line' => sub {
+    }
+    {
+      note("after empty line after version line");
       my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
 
@@ -734,9 +786,10 @@ EOF
       test_diag("Line 5: unexpected item continuation");
       changes_strict_ok(changes_file => $fname);
       test_test("fail works");
-    };
-  };
-  subtest 'item continuation: wrong indentation' => sub {
+    }
+  }
+  {
+    note("item continuation: wrong indentation");
     my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
 
@@ -760,9 +813,11 @@ EOF
     test_diag("Line 11: wrong indentation");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
-  subtest "Unexpected end of file" => sub {
-    subtest "EOF after title line" => sub {
+  }
+  {
+    note("Unexpected end of file");
+    {
+      note("EOF after title line");
       my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
 
@@ -772,8 +827,9 @@ EOF
       test_diag("Unexpected end of file");
       changes_strict_ok(changes_file => $fname);
       test_test("fail works");
-    };
-    subtest "EOF after version line" => sub {
+    }
+    {
+      note("EOF after version line");
       my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
 
@@ -785,11 +841,13 @@ EOF
       test_diag("Unexpected end of file");
       changes_strict_ok(changes_file => $fname);
       test_test("fail works");
-    };
-  };
+    }
+  }
 
-  subtest 'combined' => sub {
-    subtest 'missing dot at end of line / unexpected EOF' => sub {
+  {
+    note("combined");
+    {
+      note("missing dot at end of line / unexpected EOF");
       my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -819,8 +877,9 @@ EOF
       test_diag("Line 18: wrong indentation; missing dot at end of line");
       changes_strict_ok(changes_file => $fname);
       test_test("fail works");
-    };
-    subtest 'missing dot at end of line / unexpected EOF' => sub {
+    }
+    {
+      note("missing dot at end of line / unexpected EOF");
       my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -845,12 +904,14 @@ EOF
       test_diag("Unexpected end of file");
       changes_strict_ok(changes_file => $fname);
       test_test("fail works");
-    };
-  };
-};                              # /check changes
+    }
+  }
+}                              # /check changes
 
-subtest 'check version monotonic' => sub {
-  subtest 'duplicate version' => sub {
+{
+  note("check version monotonic");
+  {
+    note("duplicate version");
     my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
 
@@ -879,8 +940,9 @@ EOF
     test_diag("0.02: duplicate version");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
-  subtest 'wrong order of versions' => sub {
+  }
+  {
+    note("wrong order of versions");
     my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
 
@@ -910,8 +972,9 @@ EOF
     test_diag("0.02 vs. 0.03: wrong order of versions");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
-  subtest 'version dates chronologically inconsistent' => sub {
+  }
+  {
+    note("version dates chronologically inconsistent");
     my $fname = write_changes(<<"EOF");
 Revision history for distribution Foo-Bar-Baz
 
@@ -940,8 +1003,8 @@ EOF
     test_diag("date 2024-04-03 < 2024-10-12: chronologically inconsistent");
     changes_strict_ok(changes_file => $fname);
     test_test("fail works");
-  };
-};
+  }
+}
 
 
 # -------------------------------------------------------------------------------------------------

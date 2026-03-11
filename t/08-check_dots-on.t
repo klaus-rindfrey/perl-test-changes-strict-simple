@@ -11,7 +11,8 @@ use lib "$FindBin::Bin/lib";
 
 use Local::Test::Helper qw(write_changes);
 
-subtest 'missing dot at end of line' => sub {
+{
+  note("missing dot at end of line");
   my $fname = write_changes(<<'EOF');
 Revision history for distribution Foo-Bar-Baz
 
@@ -32,7 +33,7 @@ EOF
   test_diag("Line 11: missing dot at end of line");
   changes_strict_ok(changes_file => $fname);
   test_test("fail works");
-};
+}
 
 
 # -------------------------------------------------------------------------------------------------
