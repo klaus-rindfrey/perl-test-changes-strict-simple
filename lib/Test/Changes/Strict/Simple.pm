@@ -471,7 +471,7 @@ Release dates are monotonically non-decreasing
 
 Note: an item can span more than one line.
 
-Example of a valied Changes file:
+Example of a valid Changes file:
 
    Revision history for distribution Foo-Bar-Baz
 
