@@ -583,6 +583,41 @@ The module expects a traditional CPAN-style Changes format:
 Exotic or highly customized Changes formats may not be supported.
 
 
+=head1 BUGS
+
+Please report any bugs or feature requests to C<bug-test-changes-strict-simple
+at rt.cpan.org>, or through the web interface at
+L<https://rt.cpan.org/NoAuth/ReportBug.html?Queue=Test-Changes-Strict-Simple>.
+I will be notified, and then you'll automatically be notified of progress on
+your bug as I make changes.
+
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc Test::Changes::Strict::Simple
+
+You can also look for information at:
+
+=over 4
+
+=item * RT: CPAN's request tracker (report bugs here)
+
+L<https://rt.cpan.org/NoAuth/Bugs.html?Dist=Test-Changes-Strict-Simple>
+
+=item * Search CPAN
+
+L<https://metacpan.org/release/Test-Changes-Strict-Simple>
+
+=item * GitHub Repository
+
+L<https://github.com/klaus-rindfrey/perl-test-changes-strict-simple>
+
+
+=back
+
+
 =head1 SEE ALSO
 
 =over 4

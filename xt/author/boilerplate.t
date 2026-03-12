@@ -55,7 +55,7 @@ TODO: {
     "placeholder date/time"       => qr(Date/time)
   );
 
-  module_boilerplate_ok('lib/Git/RemoteURL/Parse.pm');
+  module_boilerplate_ok('lib/Test/Changes/Strict/Simple.pm');
 
 
 }
