@@ -5,11 +5,11 @@ name: Run Module Tests
 on:
   push:
     branches:
-      - main
-      - gh_actions
+      - '**'
   pull_request:
     branches:
       - main
+      - devel
   workflow_dispatch:
 
 # https://github.com/shogo82148/actions-setup-perl
@@ -17,6 +17,8 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.runner }}
+    env:
+      RELEASE_SELF_TEST: ${{ github.ref_name == 'main' && '1' || '' }}
     strategy:
       fail-fast: false
       matrix:
