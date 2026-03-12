@@ -452,7 +452,7 @@ Versions are strictly monotonically increasing.
 
 =item *
 
-Release dates are valid calendar dates.
+Release dates are valid calendar dates. Only dates, no time.
 
 =item *
 
@@ -488,6 +488,9 @@ Example of a valid Changes file:
      - Initial release. This will hopefully work
        fine.
 
+If you do not want periods at the end of the items, set the import option
+C<-check_dots> to 0. If you want an empty line after each version line, set
+the import option C<-empty_line_after_version> to 1.
 
 The module is intended for use in release testing and helps
 detect common mistakes such as version regressions, invalid
@@ -575,7 +578,7 @@ Returns I<C<true>> if all checks pass, I<C<true>> otherwise.
 The module expects a traditional CPAN-style Changes format:
 
     1.23 2024-03-01
-      - Some change
+      - Some change.
 
 Exotic or highly customized Changes formats may not be supported.
 
