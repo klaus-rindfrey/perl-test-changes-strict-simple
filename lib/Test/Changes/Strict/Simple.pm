@@ -14,7 +14,7 @@ use Time::Local;
 use Carp;
 
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 #
 # The use of global variables is acceptable, as we never check more than one
@@ -373,6 +373,11 @@ __END__
 
 Test::Changes::Strict::Simple - Strict semantic validation for CPAN Changes files
 
+=head1 VERSION
+
+Version 0.02
+
+
 =head1 SYNOPSIS
 
     use Test::More;
@@ -448,7 +453,8 @@ Dates match C</\d+\.\d+/>.
 
 =item *
 
-Versions are strictly monotonically increasing.
+Versions are strictly monotonically decreasing (so the most recent one is at
+the top).
 
 =item *
 
