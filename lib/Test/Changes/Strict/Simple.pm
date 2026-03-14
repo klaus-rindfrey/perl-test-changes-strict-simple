@@ -14,7 +14,7 @@ use Time::Local;
 use Carp;
 
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 #
 # The use of global variables is acceptable, as we never check more than one
@@ -378,7 +378,7 @@ Test::Changes::Strict::Simple - Strict semantic validation for CPAN Changes file
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 
 =head1 SYNOPSIS
