@@ -69,7 +69,7 @@ sub import {
     croak("-version_re: option has an invalid value") if ref($Ver_Re) ne "Regexp";
   }
   $Chk_Dots = delete $opts{check_dots} if exists($opts{check_dots});
-  $Reverse = delete $opts{reverse_version_check};
+  $Reverse = delete $opts{reverse_version_order};
 
   # Fail on unknown options.
   croak("Unknown option(s): " . join(", ", keys %opts)) if %opts;
@@ -457,7 +457,8 @@ Dates match C</\d+\.\d+/>.
 =item *
 
 Versions are strictly monotonically decreasing (so the most recent one is at
-the top).
+the top). You can switch to increasing versions by setting
+C<-reverse_version_order> to I<C<true>>.
 
 =item *
 
@@ -534,7 +535,7 @@ and the first element. Example:
 
 =head2 -no_export => I<BOOL>
 
-If true, no symbols are exported.
+If I<C<true>>, no symbols are exported.
 
    use Test::Changes::Strict::Simple -no_export => 1;
 
@@ -545,6 +546,11 @@ is equivalent to:
 This option is useful in conjunction with other import options. Example:
 
    use Test::Changes::Strict::Simple -empty_line_after_version => 1, -no_export => 1
+
+=head2 -reverse_version_order => I<BOOL>
+
+If I<C<true>>, versions must be strictly monotonically increasing (so the most
+recent one is at the bottom). Default is I<C<false>>.
 
 
 =head2 -version_re => I<REGEXP>
