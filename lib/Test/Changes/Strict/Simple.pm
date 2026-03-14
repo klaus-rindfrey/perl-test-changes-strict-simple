@@ -42,6 +42,7 @@ use constant {
 my $Test_Name = "Changes file passed strict checks";
 my $Empty_Line_After_Version;
 my $Chk_Dots = 1;
+my $Reverse;
 
 sub import {
   my $class = shift;
@@ -68,6 +69,7 @@ sub import {
     croak("-version_re: option has an invalid value") if ref($Ver_Re) ne "Regexp";
   }
   $Chk_Dots = delete $opts{check_dots} if exists($opts{check_dots});
+  $Reverse = delete $opts{reverse_version_check};
 
   # Fail on unknown options.
   croak("Unknown option(s): " . join(", ", keys %opts)) if %opts;
@@ -110,6 +112,7 @@ sub changes_strict_ok {
 
   my @versions;
   _check_changes(\@lines, \@versions) or return;
+  @versions = reverse(@versions) if $Reverse;
   _check_version_monotonic(\@versions) or return;
   if ($mod_version) {
     my $top_ver = $versions[0]->{version_str};
