@@ -1,5 +1,9 @@
 Revision history for distribution Test-Changes-Strict-Simple
 
+0.04  2026-03-14
+
+    - Fixed wrong example in POD.
+
 0.03  2026-03-14
 
     - Added import option -reverse_version_order.
