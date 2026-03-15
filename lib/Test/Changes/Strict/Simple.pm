@@ -384,7 +384,7 @@ Version 0.04
 =head1 SYNOPSIS
 
     use Test::More;
-    use Test::Changes::Strict::Simple qw(changes_strict_ok);
+    use Test::Changes::Strict::Simple;
 
     changes_strict_ok();
 

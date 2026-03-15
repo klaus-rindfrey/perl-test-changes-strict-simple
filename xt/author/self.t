@@ -9,4 +9,4 @@ plan skip_all => 'Release and "self" tests only'
   unless $ENV{RELEASE_TESTING} && $ENV{RELEASE_SELF_TEST};
 plan tests => 1;
 
-changes_strict_ok();
+changes_strict_ok(module_version => $Test::Changes::Strict::Simple::VERSION);
