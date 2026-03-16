@@ -1,5 +1,11 @@
 Revision history for distribution Test-Changes-Strict-Simple
 
+0.05  2026-03-16
+
+    - Added argument release_today.
+    - Completed POD.
+    - Fixed self.t test script.
+
 0.04  2026-03-14
 
     - Fixed wrong example in POD.

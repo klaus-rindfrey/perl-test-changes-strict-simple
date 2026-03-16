@@ -12,9 +12,9 @@ use Test::Builder;
 
 use Time::Local;
 use Carp;
+use POSIX qw(strftime);
 
-
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 #
 # The use of global variables is acceptable, as we never check more than one
@@ -96,8 +96,9 @@ sub import {
 
 sub changes_strict_ok {
   my %args = @_;
-  my $changes_file = delete($args{changes_file}) // "Changes";
-  my $mod_version  = delete($args{module_version});
+  my $changes_file  = delete($args{changes_file}) // "Changes";
+  my $mod_version   = delete($args{module_version});
+  my $release_today = delete($args{release_today});
   croak("Unknown arguments(s): " . join(", ", keys %args)) if %args;
 
   my $test_name = "Changes file passed strict checks";
@@ -118,6 +119,11 @@ sub changes_strict_ok {
     my $top_ver = $versions[0]->{version_str};
     $mod_version eq $top_ver or
       return _not_ok("Highest version in changelog is $top_ver, not $mod_version as expected");
+  }
+  if ($release_today) {
+    my $top_date = $versions[0]->{date};
+    $top_date eq strftime('%Y-%m-%d', localtime) or
+      return _not_ok("The date of the latest version is not today");
   }
 
   my $ok = $TB->ok($trailing_empty_lines <= 3, $Test_Name) or
@@ -340,7 +346,7 @@ sub _version_line_check {
   my ($y, $m, $d) = ($1, $2, $3);
   my $epoch;
   eval {
-    $epoch = Time::Local::timegm(0, 0, 0, $d, $m - 1, $y);
+    $epoch = Time::Local::timelocal(0, 0, 0, $d, $m - 1, $y);
     1;
   } or return "'$date': invalid date";
   $y     >= 1987 or return "$date: before Perl era";
@@ -378,7 +384,7 @@ Test::Changes::Strict::Simple - Strict semantic validation for CPAN Changes file
 
 =head1 VERSION
 
-Version 0.04
+Version 0.05
 
 
 =head1 SYNOPSIS
@@ -570,14 +576,22 @@ Named arguments:
 
 =over
 
-=item C<changes_file>
+=item C<changes_file> => I<FILENAME>
 
 Optional. File to be validated. If no file is provided, C<Changes> is assumed.
 
-=item C<module_version>
+=item C<module_version> => I<STRING>
 
 Optional. If specified, the function checks whether the highest version is
 equal to I<C<module_version>>. This is done by comparing strings.
+
+=item C<release_today> => I<BOOL>
+
+Optional. If I<C<true>>, the checks whether the highest version date is equal
+to today. This only makes sense if you want to release a version on the same
+day you run the test.
+
+Default is I<C<false>>.
 
 =back
 
@@ -602,7 +616,9 @@ Exotic or highly customized Changes formats may not be supported.
 
 Please report any bugs or feature requests to C<bug-test-changes-strict-simple
 at rt.cpan.org>, or through the web interface at
-L<https://rt.cpan.org/NoAuth/ReportBug.html?Queue=Test-Changes-Strict-Simple>.
+L<https://rt.cpan.org/NoAuth/ReportBug.html?Queue=Test-Changes-Strict-Simple>
+or create a L<GitHub
+Issue|https://github.com/klaus-rindfrey/perl-test-changes-strict-simple/issues>.
 I will be notified, and then you'll automatically be notified of progress on
 your bug as I make changes.
 
