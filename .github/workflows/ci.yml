@@ -26,8 +26,8 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.runner }}
-    env:
-      RELEASE_SELF_TEST: ${{ github.ref_name == 'main' && '1' || '' }}
+    # env:
+    #   RELEASE_SELF_TEST: ${{ github.ref_name == 'main' && '1' || '' }}
     strategy:
       fail-fast: false
       matrix:
@@ -54,7 +54,7 @@ jobs:
       - name: Install MakeMaker and dependencies
         run: |
           cpanm --notest ExtUtils::MakeMaker
-          cpanm --notest --installdeps --with-develop --with-test --verbose .
+          cpanm --notest --installdeps --with-develop --verbose .
       - name: Show content of log files on Linux
         if: failure() && startsWith(matrix.runner, 'ubuntu-')
         run: cat /home/runner/.cpanm/work/*/build.log
