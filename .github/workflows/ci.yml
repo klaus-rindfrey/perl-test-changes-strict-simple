@@ -16,7 +16,7 @@ on:
 
 jobs:
   test:
-    uses: klaus-rindfrey/github-actions-perl/.github/workflows/perl-tests.yml@v1
+    uses: klaus-rindfrey/github-actions-perl/.github/workflows/perl-tests.yml@fea
     with:
       release_test_addn: ${{ inputs.release_test_addn }}
       matrix: |
