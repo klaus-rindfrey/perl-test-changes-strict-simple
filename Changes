@@ -1,5 +1,9 @@
 Revision history for distribution Test-Changes-Strict-Simple
 
+x.yz    YYYY-MM-DD
+
+     - Adapted license info.
+
 0.06  2026-03-20
 
     - The function now throws an exception if the `module_version` argument is

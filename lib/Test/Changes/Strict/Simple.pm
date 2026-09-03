@@ -694,8 +694,7 @@ Klaus Rindfrey, C<< <klausrin at cpan.org.eu> >>
 
 This software is copyright (c) 2026 by Klaus Rindfrey.
 
-This library is free software; you may redistribute it and/or modify
-it under the same terms as Perl itself.
+License: GNU General Public License, Version 1
 
 =cut
 
